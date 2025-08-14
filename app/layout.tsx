@@ -30,14 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-       <Header/>
+         <QueryProvider>
+          <Header/>           
 <main>
-  <QueryProvider>
-        {children}
-        </QueryProvider>
+         {children}
+        
         </main>
         <Footer/>
-
+</QueryProvider>
       </body>
     </html>
   );
