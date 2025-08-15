@@ -1,6 +1,6 @@
 import axios from 'axios';
-import type { Note, NoteTag, FetchNotesResponse } from '../types/note';
-
+import type { Note, NoteTag } from '../types/note';
+import type { FetchNotesResponse } from '../types/api';
 
 axios.defaults.baseURL = "https://next-docs-api.onrender.com";
 
