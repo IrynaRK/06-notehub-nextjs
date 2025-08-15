@@ -1,25 +1,19 @@
 import axios from 'axios';
-import type { Note, NoteTag } from '../types/note';
-import { FetchNotesResponse } from '../components/NotesPage/NotesPage';
+import type { Note, NoteTag, FetchNotesResponse } from '../types/note';
+
 
 axios.defaults.baseURL = "https://next-docs-api.onrender.com";
-const API = 'https://next-docs-api.onrender.com';
-const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
-const headers = {
+const getHeaders = () => {
+const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+return {
   Authorization: `Bearer ${token}`,
+}
 };
 
-export type NoteListResponse = {
-  notes: Note[];
-  totalPages: number;
-  totalItems: number;
-  page: number;
-  perPage: number;
-}
 
-export const getNotes = async (): Promise<NoteListResponse> => {
-  const res = await axios.get<NoteListResponse>("/notes", { headers });
+export const getNotes = async (): Promise<FetchNotesResponse> => {
+  const res = await axios.get<FetchNotesResponse>("/notes", { headers: getHeaders() });
   return res.data;
 };
 
@@ -36,24 +30,24 @@ export const fetchNotes = async (
     params.search = search;
   }
 
-  const res = await axios.get<NoteListResponse>(`/notes`, { params, headers, });
+  const res = await axios.get<FetchNotesResponse>(`/notes`, { params, headers: getHeaders(), });
   return res.data;
 };
 
 export const createNote = async (
   note: { title: string; content: string; tag: NoteTag }
 ): Promise<Note> => {
-  const res = await axios.post<Note>(`${API}/notes`, note, { headers });
+  const res = await axios.post<Note>(`/notes`, note, { headers: getHeaders() });
   return res.data;
 };
 
 export const deleteNote = async (id: string): Promise<Note> => {
-  const res = await axios.delete<Note>(`${API}/notes/${id}`, { headers });
+  const res = await axios.delete<Note>(`/notes/${id}`, { headers: getHeaders() });
   return res.data;
 };
 
-export const fetchNotesById = async (id: string): Promise<Note> => {
-  const res = await axios.get<Note>(`${API}/notes/${id}`, { headers });
+export const fetchNoteById = async (id: string): Promise<Note> => {
+  const res = await axios.get<Note>(`/notes/${id}`, { headers: getHeaders() });
   return res.data;
 
 }
