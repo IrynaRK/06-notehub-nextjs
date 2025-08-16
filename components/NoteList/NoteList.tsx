@@ -23,10 +23,6 @@ export default function NoteList({ notes }: NoteListProps) {
     mutation.mutate(id);
   };
 
-  if (!Array.isArray(notes)) {
-    return <p className={css.empty}>Invalid notes</p>;
-  }
-
   if (notes.length === 0) {
     return <p className={css.empty}>No notes found</p>;
   }
@@ -44,7 +40,6 @@ export default function NoteList({ notes }: NoteListProps) {
           
             <button className={css.button} onClick={() => handleDelete(id)} disabled={mutation.isPending}
 > {mutation.isPending ? 'Deleting...' : 'Delete'}
-              Delete
             </button>
           </div>
         </li>
@@ -53,15 +48,5 @@ export default function NoteList({ notes }: NoteListProps) {
   );
 }
 
-type Props = {
-  item: Note;
-};
 
-export const NoteListItem = ({ item }: Props) => {
-  return (
-    <li>
-      <Link href={`/notes/${item.id}`}>{item.title}</Link>
-    </li>
-  );
-};
 
