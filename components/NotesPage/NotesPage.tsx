@@ -1,14 +1,12 @@
-"use client";
+import NotesClient from "@/app/notes/Notes.client";
+import { fetchNotes } from "@/lib/api";
 
-import { useEffect } from "react";
-import { testAuth } from "@/lib/api";
-
-const NotesPage = () => {
-  useEffect(() => {
-    testAuth();
-  }, []);
-
-  return <div>Сторінка нотаток</div>;
-};
-
-export default NotesPage;
+export default async function NotesPage() {
+  try {
+    const initialData = await fetchNotes('', 1);
+    return <NotesClient initialData={initialData} />;
+  } catch (error) {
+    console.error('Failed to fetch notes:', error);
+    return <p>Could not load notes. Please try again later.</p>;
+  }
+}

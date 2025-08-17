@@ -25,7 +25,7 @@ export default function NotesClient({initialData}: Props) {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['notes', page, debouncedSearch],
-    queryFn: () => fetchNotes(page, debouncedSearch),
+    queryFn: () => fetchNotes(debouncedSearch, page),
     placeholderData: keepPreviousData,
      initialData: page === 1 && !debouncedSearch ? initialData : undefined,
 
