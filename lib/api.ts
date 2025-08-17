@@ -35,10 +35,8 @@ export const fetchNotes = async (
 };
 
 export const createNote = async (
-  
-  note: { title: string; content: string }
+  note: { title: string; content: string; tag: NoteTag }
 ): Promise<Note> => {
-  console.log("Payload:", note);
   const res = await axios.post<Note>(`/notes`, note, { headers: getHeaders() });
   return res.data;
 };
