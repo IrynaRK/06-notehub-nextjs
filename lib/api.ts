@@ -1,17 +1,51 @@
 import axios from 'axios';
 import type { Note, NoteTag } from '../types/note';
 import type { FetchNotesResponse } from '../types/api';
+import type { AxiosRequestConfig } from "axios";
 
-axios.defaults.baseURL = "https://next-docs-api.onrender.com";
+axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 
-const getHeaders = () => {
-const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
-return {
-  Authorization: `Bearer ${token}`,
-}
+export const getHeaders = (): AxiosRequestConfig["headers"] => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  if (!token) {
+    console.warn("No token found in localStorage");
+  }
+
+  return token
+    ? { Authorization: `Bearer ${token}` }
+    : {};
 };
 
+export const login = async (email: string, password: string): Promise<void> => {
+  try {
+    const response = await axios.post("/auth/login", {
+      email,
+      password,
+    });
 
+    const token = response.data.token;
+
+    if (token) {
+      localStorage.setItem("token", token);
+      console.log("🔐 Токен збережено в localStorage");
+    } else {
+      console.warn("⚠️ Токен не отримано");
+    }
+  } catch (error) {
+    console.error("❌ Помилка входу:", error);
+    throw error;
+  }
+};
+
+export const testAuth = async () => {
+  try {
+    const res = await axios.get("/notes", { headers: getHeaders() });
+    console.log("✅ Авторизація успішна. Дані:", res.data);
+  } catch (error) {
+    console.error("❌ Помилка авторизації:", error);
+  }
+};
 export const getNotes = async (): Promise<FetchNotesResponse> => {
   const res = await axios.get<FetchNotesResponse>("/notes", { headers: getHeaders() });
   return res.data;
